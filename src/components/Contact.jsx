@@ -7,8 +7,8 @@ import {
   FaLinkedin,
   FaMapMarkerAlt,
   FaPhone,
-  FaTwitter,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { personalInfo } from '../data/portfolioData';
 
 const Contact = () => {
@@ -79,11 +79,11 @@ const Contact = () => {
           </h3>
           <div className="flex justify-center gap-3">
             {[
-              { label: 'GitHub', icon: FaGithub, href: personalInfo?.socials?.github, hoverClass: 'hover:text-primary dark:hover:text-accent hover:shadow-[0_0_16px_rgba(212,168,67,0.45)]' },
-              { label: 'LinkedIn', icon: FaLinkedin, href: personalInfo?.socials?.linkedin, hoverClass: 'hover:text-[#0a66c2] hover:shadow-[0_0_16px_rgba(10,102,194,0.45)]' },
-              { label: 'Twitter', icon: FaTwitter, href: personalInfo?.socials?.twitter, hoverClass: 'hover:text-[#1d9bf0] hover:shadow-[0_0_16px_rgba(29,155,240,0.45)]' },
-              { label: 'Instagram', icon: FaInstagram, href: personalInfo?.socials?.instagram, hoverClass: 'hover:text-[#e4405f] hover:shadow-[0_0_16px_rgba(228,64,95,0.45)]' },
-              { label: 'Facebook', icon: FaFacebook, href: personalInfo?.socials?.facebook, hoverClass: 'hover:text-[#1877f2] hover:shadow-[0_0_16px_rgba(24,119,242,0.45)]' },
+              { label: 'GitHub', icon: FaGithub, href: personalInfo?.socials?.github, hoverClass: 'hover:text-primary dark:hover:text-accent hover:shadow-[0_0_20px_rgba(212,168,67,0.55)]' },
+              { label: 'LinkedIn', icon: FaLinkedin, href: personalInfo?.socials?.linkedin, hoverClass: 'hover:text-[#0a66c2] hover:shadow-[0_0_20px_rgba(10,102,194,0.55)]' },
+              { label: 'X', icon: FaXTwitter, href: personalInfo?.socials?.twitter, hoverClass: 'hover:text-black dark:hover:text-white hover:shadow-[0_0_20px_rgba(15,23,42,0.55)] dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.55)]' },
+              { label: 'Instagram', icon: FaInstagram, href: personalInfo?.socials?.instagram, hoverClass: 'hover:text-[#e4405f] hover:shadow-[0_0_20px_rgba(228,64,95,0.55)]' },
+              { label: 'Facebook', icon: FaFacebook, href: personalInfo?.socials?.facebook, hoverClass: 'hover:text-[#1877f2] hover:shadow-[0_0_20px_rgba(24,119,242,0.55)]' },
             ].map(({ label, icon: Icon, href, hoverClass }) => (
               <a
                 key={label}
@@ -91,9 +91,9 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className={`w-10 h-10 rounded-full border border-slate-200 dark:border-dark-border bg-slate-100 dark:bg-dark flex items-center justify-center text-slate-700 dark:text-gray-300 hover:scale-110 transition-all shadow-sm ${hoverClass}`}
+                className={`t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center text-slate-700 dark:text-gray-300 hover:scale-110 transition-all shadow-sm ${hoverClass}`}
               >
-                <Icon size={17} />
+                <Icon size={18} />
               </a>
             ))}
           </div>

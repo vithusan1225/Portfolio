@@ -1,17 +1,21 @@
+import profileImage from './Profile_pic.jpeg';
+import resumeUrl from './Professional CV Resume.pdf';
+
 export const personalInfo = {
   name: 'Vithusan S',
   title: 'Full Stack Developer',
   email: 'vithusan2909@gmail.com',
   phone: '+94772487639',
   location: 'Sri Lanka',
-  bio: 'I am a full-stack developer focused on building modern, responsive, and user-friendly web applications. I enjoy turning ideas into clean, scalable digital experiences using React, Node.js, and modern UI engineering practices.',
-  resumeUrl: '#',
+  bio: 'I am a passionate full-stack developer focused on building modern, responsive, and user-friendly web applications. I enjoy turning ideas into clean, scalable digital experiences using React, Node.js, Java, Spring Boot, and modern UI engineering practices. I\'m always exploring new technologies, improving my skills, and building projects that solve real-world problems.',
+  resumeUrl,
+  profileImage,
   socials: {
     github: 'https://github.com/vithusan1225',
-    linkedin: '#',
-    twitter: '#',
-    instagram: '#',
-    facebook: '#',
+    linkedin: 'https://www.linkedin.com/in/vithusan-santhirakumar-203473232/',
+    twitter: 'https://x.com/VithusanSa22965',
+    instagram: 'https://www.instagram.com/vithusan1225/',
+    facebook: 'https://www.facebook.com/vithusan.santhirakumar',
   }
 };
 
