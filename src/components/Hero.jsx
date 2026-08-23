@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTwitter, FaCode, FaRocket, FaTerminal, FaChevronDown, FaChevronUp, FaServer, FaDatabase } from 'react-icons/fa';
+import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaCode, FaRocket, FaTerminal, FaChevronDown, FaChevronUp, FaServer, FaDatabase } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { personalInfo } from '../data/portfolioData';
 
 const Hero = () => {
@@ -89,13 +90,13 @@ const Hero = () => {
                 <FaLinkedin size={18} />
               </a>
               <a
-                href={personalInfo?.socials?.twitter || 'https://twitter.com'}
+                href={personalInfo?.socials?.twitter || 'https://x.com'}
                 target="_blank"
                 rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-[#1d9bf0] hover:scale-110 hover:shadow-[0_0_16px_rgba(29,155,240,0.45)] shadow-sm transition-all"
-                aria-label="Twitter"
+                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-black dark:hover:text-white hover:scale-110 hover:shadow-[0_0_16px_rgba(15,23,42,0.45)] dark:hover:shadow-[0_0_16px_rgba(255,255,255,0.45)] shadow-sm transition-all"
+                aria-label="X"
               >
-                <FaTwitter size={18} />
+                <FaXTwitter size={18} />
               </a>
               <a
                 href={personalInfo?.socials?.instagram || 'https://instagram.com'}
