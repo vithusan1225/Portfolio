@@ -1,219 +1,436 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaExternalLinkAlt, FaGithub, FaChevronDown, FaChevronUp, FaCheck, FaLayerGroup } from 'react-icons/fa';
+import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  FaExternalLinkAlt,
+  FaGithub,
+  FaChevronDown,
+  FaChevronUp,
+  FaCheck,
+  FaLayerGroup,
+  FaCode,
+} from 'react-icons/fa';
+
 import { projects } from '../data/portfolioData';
 import SlidingTabs from './SlidingTabs';
+import SectionHeading from './SectionHeading';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [expandedId, setExpandedId] = useState(null);
 
-  const fallbackProjects = [
-    {
-      id: 1,
-      title: 'E-Commerce Platform',
-      description:
-        'A full-stack e-commerce platform built with the MERN stack featuring user authentication, payment processing with Stripe, and order tracking.',
-      features: ['Secure Stripe Checkout', 'JWT Auth & RBAC', 'Realtime Inventory Management'],
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&auto=format&fit=crop&q=80',
-      category: 'Full Stack',
-      tags: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-    },
-    {
-      id: 2,
-      title: 'Collaborative Task Manager',
-      description:
-        'Real-time task and project management tool with Kanban boards, drag-and-drop workflow, and team messaging features.',
-      features: ['Drag & Drop Kanban', 'WebSocket Collaboration', 'Team Activity Feed'],
-      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&auto=format&fit=crop&q=80',
-      category: 'Full Stack',
-      tags: ['React', 'Express', 'MongoDB', 'Socket.io'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-    },
-    {
-      id: 3,
-      title: 'Weather & Forecast Dashboard',
-      description:
-        'Interactive weather forecasting web application with dynamic city search, 7-day weather radar, and UV index maps.',
-      features: ['Geolocation Auto-detect', 'Interactive Radar Charts', 'Extreme Weather Alerts'],
-      image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?w=600&auto=format&fit=crop&q=80',
-      category: 'Frontend',
-      tags: ['React', 'Tailwind CSS', 'OpenWeather API'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-    },
-  ];
+  /* ==========================================================
+     SAFE PROJECT DATA
+  ========================================================== */
 
-  const projectsData = projects && projects.length > 0 ? projects : fallbackProjects;
-  const filters = ['All', 'Full Stack', 'Frontend', 'Backend'];
+  const projectList = Array.isArray(projects) ? projects : [];
 
-  const filteredProjects =
-    activeFilter === 'All'
-      ? projectsData
-      : projectsData.filter((project) => project.category === activeFilter);
+  /* ==========================================================
+     PROJECT CATEGORIES
+  ========================================================== */
+
+  const categories = useMemo(() => {
+    const uniqueCategories = [
+      ...new Set(
+        projectList
+          .map((project) => project?.category)
+          .filter(Boolean)
+      ),
+    ];
+
+    return ['All', ...uniqueCategories];
+  }, [projectList]);
+
+  /* ==========================================================
+     FILTER PROJECTS
+  ========================================================== */
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'All') {
+      return projectList;
+    }
+
+    return projectList.filter(
+      (project) => project?.category === activeFilter
+    );
+  }, [activeFilter, projectList]);
+
+  /* ==========================================================
+     EXPAND / COLLAPSE
+  ========================================================== */
 
   const toggleExpand = (id) => {
-    setExpandedId((prev) => (prev === id ? null : id));
+    setExpandedId((previousId) =>
+      previousId === id ? null : id
+    );
   };
 
+  /* ==========================================================
+     ANIMATION
+  ========================================================== */
+
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: {},
     visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.12 },
+      transition: {
+        staggerChildren: 0.1,
+      },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
+    hidden: {
+      opacity: 0,
+      y: 25,
+    },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5 },
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut',
+      },
     },
   };
 
   return (
-    <section id="projects" className="py-24 bg-white dark:bg-dark-card/40 transition-colors duration-300">
-      <div className="container mx-auto px-6 md:px-12">
-        {/* Header */}
-        <div className="flex flex-col items-center mb-12 text-center">
-          <span className="text-xs uppercase tracking-widest font-semibold text-accent mb-2">
-            Showcase
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
-            Featured Projects
-          </h2>
-          <div className="w-16 h-1 bg-accent rounded-full"></div>
-        </div>
+    <section
+      id="projects"
+      className="border-t border-light-border bg-white py-24 transition-colors duration-300 dark:border-dark-border dark:bg-black md:py-32"
+    >
+      <div className="container mx-auto px-6 md:px-10">
+        {/* =====================================================
+            SECTION HEADER
+        ====================================================== */}
 
-        {/* Transitions.dev Sliding Tabs */}
-        <div className="flex justify-center mb-12">
-          <SlidingTabs
-            tabs={filters}
-            activeTab={activeFilter}
-            onTabChange={setActiveFilter}
-          />
-        </div>
+        <SectionHeading
+          eyebrow="Showcase"
+          title="Featured Projects"
+          className="mb-12"
+          align="center"
+        />
 
-        {/* Projects Grid with t-resize Card and t-panel-slide Panel */}
-        <motion.div
-          key={activeFilter}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-        >
-          {filteredProjects.map((project) => {
-            const isExpanded = expandedId === project.id;
-            const liveHref = project.liveUrl || project.liveLink || '#';
-            const githubHref = project.githubUrl || project.githubLink || '#';
+        {/* =====================================================
+            FILTER TABS
+        ====================================================== */}
 
-            return (
-              <motion.div
-                key={project.id}
-                variants={itemVariants}
-                className="t-resize group bg-white dark:bg-dark-card border border-slate-200/80 dark:border-dark-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl dark:hover:border-accent/50 flex flex-col h-full"
-              >
-                {/* Image */}
-                <div className="relative h-52 overflow-hidden bg-slate-100 dark:bg-dark t-resize">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                    <span className="text-white text-xs font-semibold bg-primary/80 backdrop-blur-sm px-3 py-1 rounded-full">
-                      {project.category}
-                    </span>
-                  </div>
-                  <div className="absolute top-3 right-3 bg-white/90 dark:bg-dark/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-primary dark:text-accent shadow-sm">
-                    {project.category}
-                  </div>
-                </div>
+        {categories.length > 1 && (
+          <div
+            className="mb-12 flex justify-center"
+            role="tablist"
+            aria-label="Filter projects by category"
+          >
+            <SlidingTabs
+              tabs={categories}
+              activeTab={activeFilter}
+              onTabChange={(category) => {
+                setActiveFilter(category);
+                setExpandedId(null);
+              }}
+            />
+          </div>
+        )}
 
-                {/* Content */}
-                <div className="p-6 flex flex-col flex-grow t-resize">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-accent transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-600 dark:text-gray-300 text-sm mb-4 leading-relaxed flex-grow">
-                    {project.description}
-                  </p>
+        {/* =====================================================
+            PROJECT GRID
+        ====================================================== */}
 
-                  {/* Expandable Key Highlights with Transitions.dev t-panel-slide */}
-                  {project.features && (
-                    <div className="mb-4">
-                      <button
-                        onClick={() => toggleExpand(project.id)}
-                        className="text-xs font-bold text-accent hover:text-accent-hover inline-flex items-center gap-1.5 mb-2 focus:outline-none transition-colors"
-                      >
-                        <FaLayerGroup size={11} />
-                        {isExpanded ? 'Hide Architecture Info' : 'Key Architecture Features'}
-                        {isExpanded ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
-                      </button>
+        <AnimatePresence mode="wait">
+          {filteredProjects.length > 0 ? (
+            <motion.div
+              key={activeFilter}
+              className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              {filteredProjects.map((project) => {
+                const isExpanded = expandedId === project?.id;
 
-                      {/* Panel reveal container */}
-                      <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-48' : 'max-h-0'}`}>
-                        <div
-                          className="t-panel-slide space-y-1.5 pt-1 pb-2"
-                          data-open={isExpanded ? 'true' : 'false'}
-                        >
-                          {project.features.map((feat, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center gap-2 text-xs text-slate-600 dark:text-gray-300 bg-slate-50 dark:bg-dark px-3 py-2 rounded-xl border border-slate-100 dark:border-dark-border shadow-inner"
-                            >
-                              <FaCheck size={9} className="text-accent shrink-0" />
-                              <span>{feat}</span>
-                            </div>
-                          ))}
+                const liveHref =
+                  project?.liveUrl || project?.liveLink;
+
+                const githubHref =
+                  project?.githubUrl || project?.githubLink;
+
+                const features = Array.isArray(project?.features)
+                  ? project.features
+                  : [];
+
+                const tags = Array.isArray(project?.tags)
+                  ? project.tags
+                  : [];
+
+                return (
+                  <motion.article
+                    key={project?.id || project?.title}
+                    variants={itemVariants}
+                    className="t-resize group flex h-full flex-col overflow-hidden rounded-2xl border border-light-border bg-white transition-all duration-300 hover:-translate-y-1 hover:border-light-text hover:shadow-2xl dark:border-dark-border dark:bg-dark-card dark:hover:border-white"
+                  >
+                    {/* ==================================================
+                        PROJECT IMAGE
+                    =================================================== */}
+
+                    <div className="relative h-56 overflow-hidden bg-light-cardHover dark:bg-dark">
+                      {project?.image ? (
+                        <img
+                          src={project.image}
+                          alt={`${project?.title || 'Project'} preview`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-[#111]">
+                          <FaCode className="text-4xl text-slate-400 dark:text-zinc-600" />
                         </div>
+                      )}
+
+                      {/* Image overlay */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+                      {/* Category */}
+                      {project?.category && (
+                        <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                          {project.category}
+                        </div>
+                      )}
+
+                      {/* Project number */}
+                      <div className="absolute bottom-4 left-4 font-mono text-xs font-bold text-white/70">
+                        {String(project?.id || '').padStart(2, '0')}
                       </div>
                     </div>
-                  )}
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {project.tags &&
-                      project.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-slate-100 dark:bg-dark text-slate-700 dark:text-gray-300 border border-slate-200/60 dark:border-dark-border text-xs px-2.5 py-1 rounded-md font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                  </div>
+                    {/* ==================================================
+                        PROJECT CONTENT
+                    =================================================== */}
 
-                  {/* Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-dark-border text-sm mt-auto">
-                    <a
-                      href={liveHref}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 font-bold text-primary dark:text-accent hover:underline"
-                    >
-                      <FaExternalLinkAlt size={13} /> Live Demo
-                    </a>
-                    <a
-                      href={githubHref}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    >
-                      <FaGithub size={16} /> Code
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+                    <div className="flex flex-grow flex-col p-6">
+                      {/* Title */}
+                      <h3 className="mb-2 text-xl font-bold tracking-tight text-light-text dark:text-white">
+                        {project?.title || 'Untitled Project'}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="mb-5 flex-grow text-sm leading-relaxed text-light-muted dark:text-dark-muted">
+                        {project?.description ||
+                          'A project built with modern technologies and development practices.'}
+                      </p>
+
+                      {/* ==================================================
+                          ARCHITECTURE / FEATURES
+                      =================================================== */}
+
+                      {features.length > 0 && (
+                        <div className="mb-5">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              toggleExpand(project?.id)
+                            }
+                            aria-expanded={isExpanded}
+                            className="inline-flex items-center gap-2 rounded-lg py-1 text-xs font-bold text-light-text transition-opacity hover:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-light-text dark:text-white dark:focus-visible:ring-white"
+                          >
+                            <FaLayerGroup size={11} />
+
+                            {isExpanded
+                              ? 'Hide architecture'
+                              : 'View architecture'}
+
+                            {isExpanded ? (
+                              <FaChevronUp size={9} />
+                            ) : (
+                              <FaChevronDown size={9} />
+                            )}
+                          </button>
+
+                          <AnimatePresence initial={false}>
+                            {isExpanded && (
+                              <motion.div
+                                initial={{
+                                  height: 0,
+                                  opacity: 0,
+                                }}
+                                animate={{
+                                  height: 'auto',
+                                  opacity: 1,
+                                }}
+                                exit={{
+                                  height: 0,
+                                  opacity: 0,
+                                }}
+                                transition={{
+                                  duration: 0.3,
+                                  ease: 'easeInOut',
+                                }}
+                                className="overflow-hidden"
+                              >
+                                <div className="space-y-2 pt-3">
+                                  {features.map(
+                                    (feature, index) => (
+                                      <div
+                                        key={`${feature}-${index}`}
+                                        className="flex items-start gap-2 rounded-xl border border-light-border bg-light-cardHover px-3 py-2.5 text-xs text-light-text dark:border-dark-border dark:bg-dark dark:text-dark-text"
+                                      >
+                                        <FaCheck
+                                          size={9}
+                                          className="mt-0.5 shrink-0 text-emerald-500"
+                                        />
+
+                                        <span>{feature}</span>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      )}
+
+                      {/* ==================================================
+                          TECHNOLOGY TAGS
+                      =================================================== */}
+
+                      {tags.length > 0 && (
+                        <div className="mb-6 flex flex-wrap gap-1.5">
+                          {tags.map((tag, index) => (
+                            <span
+                              key={`${tag}-${index}`}
+                              className="rounded-md border border-light-border bg-light-cardHover px-2.5 py-1 font-mono text-[10px] font-medium text-light-text dark:border-dark-border dark:bg-dark dark:text-gray-300"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* ==================================================
+                          PROJECT ACTIONS
+                      =================================================== */}
+
+                      <div className="mt-auto flex items-center justify-between border-t border-light-border pt-4 dark:border-dark-border">
+                        {/* Live Demo */}
+                        {liveHref ? (
+                          <a
+                            href={liveHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-bold text-light-text transition-opacity hover:opacity-60 dark:text-white"
+                            aria-label={`View ${project?.title} live demo`}
+                          >
+                            <FaExternalLinkAlt size={12} />
+                            Live Demo
+                          </a>
+                        ) : (
+                          <span className="cursor-not-allowed text-sm font-bold text-slate-400 dark:text-zinc-600">
+                            Live Demo unavailable
+                          </span>
+                        )}
+
+                        {/* GitHub */}
+                        {githubHref ? (
+                          <a
+                            href={githubHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-semibold text-light-muted transition-colors hover:text-light-text dark:text-dark-muted dark:hover:text-white"
+                            aria-label={`View ${project?.title} source code`}
+                          >
+                            <FaGithub size={16} />
+                            Code
+                          </a>
+                        ) : (
+                          <span className="cursor-not-allowed text-sm font-semibold text-slate-400 dark:text-zinc-600">
+                            Code unavailable
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
+          ) : (
+            /* =====================================================
+                EMPTY STATE
+            ====================================================== */
+
+            <motion.div
+              key="empty"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              className="rounded-2xl border border-dashed border-light-border bg-light-cardHover px-6 py-16 text-center dark:border-dark-border dark:bg-dark-card"
+            >
+              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-white text-light-text shadow-sm dark:bg-black dark:text-white">
+                <FaLayerGroup />
+              </div>
+
+              <h3 className="mb-2 text-lg font-bold text-light-text dark:text-white">
+                No projects found
+              </h3>
+
+              <p className="text-sm text-light-muted dark:text-dark-muted">
+                There are currently no projects under{' '}
+                <span className="font-semibold">
+                  {activeFilter}
+                </span>
+                .
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* =====================================================
+            BOTTOM MESSAGE
+        ====================================================== */}
+
+        {filteredProjects.length > 0 && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+            }}
+            className="mx-auto mt-12 max-w-2xl text-center"
+          >
+            <p className="text-sm leading-relaxed text-light-muted dark:text-dark-muted">
+              A selection of projects combining{' '}
+              <span className="font-semibold text-light-text dark:text-white">
+                full-stack development
+              </span>
+              ,{' '}
+              <span className="font-semibold text-light-text dark:text-white">
+                modern technologies
+              </span>
+              , and{' '}
+              <span className="font-semibold text-light-text dark:text-white">
+                data-driven thinking
+              </span>
+              .
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   );

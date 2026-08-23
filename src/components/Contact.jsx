@@ -1,103 +1,230 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   FaEnvelope,
-  FaFacebook,
-  FaGithub,
-  FaInstagram,
-  FaLinkedin,
   FaMapMarkerAlt,
   FaPhone,
+  FaArrowRight,
 } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+
 import { personalInfo } from '../data/portfolioData';
+import SectionHeading from './SectionHeading';
+import SocialLinks from './SocialLinks';
 
 const Contact = () => {
+  const email = personalInfo?.email;
+  const phone = personalInfo?.phone;
+  const location = personalInfo?.location || 'Sri Lanka';
+
   const contactDetails = [
     {
+      id: 'email',
       label: 'Email',
-      value: personalInfo?.email || 'vithusan2909@gmail.com',
-      href: `mailto:${personalInfo?.email || 'vithusan2909@gmail.com'}`,
+      value: email || 'Email not available',
+      href: email ? `mailto:${email}` : null,
       icon: FaEnvelope,
+      description: 'Send me an email',
     },
     {
+      id: 'phone',
       label: 'Phone',
-      value: personalInfo?.phone || '+94772487639',
-      href: `tel:${personalInfo?.phone || '+94772487639'}`,
+      value: phone || 'Phone not available',
+      href: phone ? `tel:${phone}` : null,
       icon: FaPhone,
+      description: 'Give me a call',
     },
     {
+      id: 'location',
       label: 'Location',
-      value: personalInfo?.location || 'Sri Lanka',
+      value: location,
+      href: null,
       icon: FaMapMarkerAlt,
+      description: 'Currently based in',
     },
   ];
 
-  return (
-    <section id="contact" className="py-24 bg-white dark:bg-dark-card/40 transition-colors duration-300">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col items-center mb-14 text-center">
-          <span className="text-xs uppercase tracking-widest font-semibold text-accent mb-2">
-            Let's Talk
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
-            Get In Touch
-          </h2>
-          <div className="w-16 h-1 bg-accent rounded-full" />
-        </div>
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 25,
+    },
+    visible: (index) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: 'easeOut',
+      },
+    }),
+  };
 
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          {contactDetails.map(({ label, value, href, icon: Icon }) => {
-            const content = (
+  return (
+    <section
+      id="contact"
+      className="relative overflow-hidden border-t border-light-border bg-white py-24 transition-colors duration-300 dark:border-dark-border dark:bg-black md:py-32"
+    >
+      {/* =====================================================
+          BACKGROUND DECORATION
+      ====================================================== */}
+
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-32 top-20 h-72 w-72 rounded-full bg-purple-500/5 blur-3xl dark:bg-purple-500/10" />
+
+        <div className="absolute -bottom-32 -left-32 h-72 w-72 rounded-full bg-blue-500/5 blur-3xl dark:bg-blue-500/10" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-6 md:px-10">
+        {/* =====================================================
+            SECTION HEADER
+        ====================================================== */}
+
+        <SectionHeading
+          eyebrow="Let's Talk"
+          title="Get In Touch"
+          className="mb-14"
+          align="center"
+        />
+
+        {/* =====================================================
+            MAIN CTA
+        ====================================================== */}
+
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{
+            duration: 0.6,
+            ease: 'easeOut',
+          }}
+          className="mx-auto mb-12 max-w-3xl text-center"
+        >
+          <h3 className="text-3xl font-extrabold tracking-tight text-light-text dark:text-white sm:text-4xl md:text-5xl">
+            Have a project in mind?
+          </h3>
+
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-light-muted dark:text-dark-muted sm:text-lg">
+            Whether you have a project idea, a collaboration opportunity,
+            or simply want to connect, feel free to reach out. I'm always
+            interested in building meaningful things with code and data.
+          </p>
+        </motion.div>
+
+        {/* =====================================================
+            CONTACT CARDS
+        ====================================================== */}
+
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {contactDetails.map((contact, index) => {
+            const Icon = contact.icon;
+
+            const cardContent = (
               <>
-                <Icon className="mx-auto mb-4 text-accent text-2xl" />
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-gray-500 mb-2">
-                  {label}
+                {/* Icon */}
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-light-text transition-all duration-300 group-hover:scale-110 group-hover:bg-light-text group-hover:text-white dark:bg-white/10 dark:text-white dark:group-hover:bg-white dark:group-hover:text-black">
+                  <Icon className="text-lg" />
+                </div>
+
+                {/* Label */}
+                <p className="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-light-muted dark:text-dark-muted">
+                  {contact.label}
                 </p>
-                <p className="font-medium text-slate-800 dark:text-gray-200 break-words">
-                  {value}
+
+                {/* Value */}
+                <p className="break-words text-sm font-bold text-light-text dark:text-white sm:text-base">
+                  {contact.value}
                 </p>
+
+                {/* Description */}
+                <p className="mt-2 text-xs text-light-muted dark:text-dark-muted">
+                  {contact.description}
+                </p>
+
+                {/* Arrow */}
+                {contact.href && (
+                  <FaArrowRight className="absolute right-5 top-5 text-xs text-light-muted opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 dark:text-dark-muted" />
+                )}
               </>
             );
 
-            return href ? (
-              <a
-                key={label}
-                href={href}
-                className="group hover:text-accent transition-colors"
+            return (
+              <motion.div
+                key={contact.id}
+                custom={index}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                  margin: '-50px',
+                }}
               >
-                {content}
-              </a>
-            ) : (
-              <div key={label}>{content}</div>
+                {contact.href ? (
+                  <a
+                    href={contact.href}
+                    className="group relative flex h-full min-h-[180px] flex-col rounded-2xl border border-light-border bg-white p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-light-text hover:shadow-xl dark:border-dark-border dark:bg-dark-card dark:hover:border-white"
+                    aria-label={`${contact.description}: ${contact.value}`}
+                  >
+                    {cardContent}
+                  </a>
+                ) : (
+                  <div className="group relative flex h-full min-h-[180px] flex-col rounded-2xl border border-light-border bg-white p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-light-text hover:shadow-xl dark:border-dark-border dark:bg-dark-card dark:hover:border-white">
+                    {cardContent}
+                  </div>
+                )}
+              </motion.div>
             );
           })}
         </div>
 
-        <div className="mt-14 text-center">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-gray-500 mb-4">
-            Social Profiles
-          </h3>
-          <div className="flex justify-center gap-3">
-            {[
-              { label: 'GitHub', icon: FaGithub, href: personalInfo?.socials?.github, hoverClass: 'hover:text-primary dark:hover:text-accent hover:shadow-[0_0_20px_rgba(212,168,67,0.55)]' },
-              { label: 'LinkedIn', icon: FaLinkedin, href: personalInfo?.socials?.linkedin, hoverClass: 'hover:text-[#0a66c2] hover:shadow-[0_0_20px_rgba(10,102,194,0.55)]' },
-              { label: 'X', icon: FaXTwitter, href: personalInfo?.socials?.twitter, hoverClass: 'hover:text-black dark:hover:text-white hover:shadow-[0_0_20px_rgba(15,23,42,0.55)] dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.55)]' },
-              { label: 'Instagram', icon: FaInstagram, href: personalInfo?.socials?.instagram, hoverClass: 'hover:text-[#e4405f] hover:shadow-[0_0_20px_rgba(228,64,95,0.55)]' },
-              { label: 'Facebook', icon: FaFacebook, href: personalInfo?.socials?.facebook, hoverClass: 'hover:text-[#1877f2] hover:shadow-[0_0_20px_rgba(24,119,242,0.55)]' },
-            ].map(({ label, icon: Icon, href, hoverClass }) => (
-              <a
-                key={label}
-                href={href || '#'}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={label}
-                className={`t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center text-slate-700 dark:text-gray-300 hover:scale-110 transition-all shadow-sm ${hoverClass}`}
-              >
-                <Icon size={18} />
-              </a>
-            ))}
+        {/* =====================================================
+            SOCIAL PROFILES
+        ====================================================== */}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.6,
+            delay: 0.3,
+          }}
+          className="mx-auto mt-14 max-w-5xl border-t border-light-border pt-10 text-center dark:border-dark-border"
+        >
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-light-muted dark:text-dark-muted">
+            Connect With Me
+          </p>
+
+          <div className="flex justify-center">
+            <SocialLinks socials={personalInfo?.socials} />
           </div>
-        </div>
+        </motion.div>
+
+        {/* =====================================================
+            BOTTOM CTA
+        ====================================================== */}
+
+        {email && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.5,
+              delay: 0.4,
+            }}
+            className="mt-12 text-center"
+          >
+            <a
+              href={`mailto:${email}`}
+              className="t-resize inline-flex items-center gap-2 rounded-full bg-light-text px-7 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-xl dark:bg-white dark:text-black"
+            >
+              Start a conversation
+              <FaArrowRight className="text-xs" />
+            </a>
+          </motion.div>
+        )}
       </div>
     </section>
   );

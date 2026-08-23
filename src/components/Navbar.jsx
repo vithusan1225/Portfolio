@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
+
 import ThemeToggle from './ThemeToggle';
-import { useTheme } from '../context/ThemeContext';
+import logo from '../data/LOGO.png';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isDark } = useTheme();
+  const [activeSection, setActiveSection] = useState('hero');
 
   const navLinks = [
     { name: 'About', id: 'about' },
@@ -19,119 +20,337 @@ const Navbar = () => {
     { name: 'Contact', id: 'contact' },
   ];
 
+  /* ==========================================================
+     SCROLL + ACTIVE SECTION
+  ========================================================== */
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
+
+      const sections = ['hero', ...navLinks.map((link) => link.id)];
+
+      let currentSection = 'hero';
+
+      sections.forEach((sectionId) => {
+        const section = document.getElementById(sectionId);
+
+        if (!section) return;
+
+        const sectionTop = section.offsetTop - 180;
+
+        if (window.scrollY >= sectionTop) {
+          currentSection = sectionId;
+        }
+      });
+
+      setActiveSection(currentSection);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  /* ==========================================================
+     ESCAPE KEY
+  ========================================================== */
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  /* ==========================================================
+     PREVENT BODY SCROLL WHEN MOBILE MENU IS OPEN
+  ========================================================== */
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  /* ==========================================================
+     SCROLL TO SECTION
+  ========================================================== */
 
   const scrollToSection = (id) => {
     setIsMobileMenuOpen(false);
+
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   };
 
   return (
-    <nav
-      className={`fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-7xl rounded-full py-3.5 transition-[background-color,border-color,box-shadow] duration-300 ${
-        isScrolled
-          ? 'bg-white/80 dark:bg-dark/85 backdrop-blur-md shadow-xl dark:shadow-black/50 border border-light-border dark:border-dark-border'
-          : 'bg-white/55 dark:bg-dark/60 backdrop-blur-sm shadow-md dark:shadow-black/30 border border-light-border/60 dark:border-dark-border/60'
-      }`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 flex justify-between items-center">
-        {/* Brand */}
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => scrollToSection('hero')}
-        >
-          <span className="font-bold text-xl tracking-tight text-primary dark:text-white">
-            Portfolio<span className="text-accent">.</span>
-          </span>
-        </div>
+    <>
+      {/* ======================================================
+          DESKTOP / MAIN NAVBAR
+      ======================================================= */}
 
-        {/* Desktop Nav Links + Theme Switcher */}
-        <div className="hidden md:flex items-center space-x-7">
-          {navLinks.map((link) => (
-            <button
-              key={link.name}
-              onClick={() => scrollToSection(link.id)}
-              className={`text-sm font-medium transition-all hover:scale-105 hover:text-accent dark:hover:text-accent ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-200'
-                  : 'text-gray-800 dark:text-gray-100'
-              }`}
-            >
-              {link.name}
-            </button>
-          ))}
+      <motion.nav
+        initial={{ y: -30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          duration: 0.5,
+          ease: 'easeOut',
+        }}
+        className={`fixed left-4 right-4 top-4 z-50 rounded-full border transition-all duration-300 md:left-12 md:right-12 lg:left-24 lg:right-24 ${
+          isScrolled
+            ? 'border-light-border bg-white/90 shadow-xl shadow-black/10 backdrop-blur-xl dark:border-dark-border dark:bg-[#0b0b0b]/90 dark:shadow-black/40'
+            : 'border-light-border/80 bg-white/80 shadow-lg shadow-black/5 backdrop-blur-md dark:border-dark-border/80 dark:bg-[#111]/80'
+        }`}
+      >
+        <div className="container mx-auto flex h-16 items-center justify-between px-5 sm:px-6 md:px-8">
+          {/* ==================================================
+              BRAND
+          =================================================== */}
 
-          {/* Theme Switcher Toggle */}
-          <div className="pl-3 border-l border-gray-200 dark:border-gray-700 flex items-center">
+          <button
+            type="button"
+            onClick={() => scrollToSection('hero')}
+            className="group flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-light-text dark:focus-visible:ring-white"
+            aria-label="Go to homepage"
+          >
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg">
+              <img
+                src={logo}
+                alt="Vithusan logo"
+                className="h-8 w-8 object-contain grayscale contrast-125 transition-transform duration-300 group-hover:scale-110 dark:invert"
+              />
+            </div>
+
+            <span className="font-display text-lg font-extrabold tracking-tight text-light-text dark:text-white">
+              Vithusan<span className="text-light-muted dark:text-dark-muted">.</span>
+            </span>
+          </button>
+
+          {/* ==================================================
+              DESKTOP NAVIGATION
+          =================================================== */}
+
+          <div className="hidden items-center gap-1 lg:flex">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+
+              return (
+                <button
+                  key={link.id}
+                  type="button"
+                  onClick={() => scrollToSection(link.id)}
+                  className={`relative rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isActive
+                      ? 'text-light-text dark:text-white'
+                      : 'text-light-muted hover:text-light-text dark:text-dark-muted dark:hover:text-white'
+                  }`}
+                >
+                  {link.name}
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeNavIndicator"
+                      className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-light-text dark:bg-white"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* ==================================================
+              RIGHT CONTROLS
+          =================================================== */}
+
+          <div className="flex items-center gap-2">
             <ThemeToggle />
+
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() =>
+                setIsMobileMenuOpen((previous) => !previous)
+              }
+              className="flex h-10 w-10 items-center justify-center rounded-full text-light-text transition-colors hover:bg-light-cardHover dark:text-white dark:hover:bg-dark-card lg:hidden"
+              aria-label={
+                isMobileMenuOpen
+                  ? 'Close navigation menu'
+                  : 'Open navigation menu'
+              }
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isMobileMenuOpen ? (
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                  >
+                    <HiX size={23} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                  >
+                    <HiMenuAlt3 size={23} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
           </div>
         </div>
+      </motion.nav>
 
-        {/* Mobile Nav Toggle & Theme Toggle */}
-        <div className="flex md:hidden items-center gap-3">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-card transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
-          </button>
-        </div>
-      </div>
+      {/* ======================================================
+          MOBILE MENU
+      ======================================================= */}
 
-      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            <motion.div
+            {/* Backdrop */}
+            <motion.button
+              type="button"
+              aria-label="Close navigation menu"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 z-[60] cursor-default bg-black/50 backdrop-blur-sm lg:hidden"
             />
-            <motion.div
+
+            {/* Drawer */}
+            <motion.aside
+              id="mobile-navigation"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 right-0 h-screen w-72 bg-white dark:bg-dark border-l border-light-border dark:border-dark-border shadow-2xl flex flex-col pt-20 px-6 z-50 md:hidden"
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 30,
+              }}
+              className="fixed bottom-0 right-0 top-0 z-[70] flex w-[min(85vw,360px)] flex-col border-l border-light-border bg-white shadow-2xl dark:border-dark-border dark:bg-[#080808] lg:hidden"
+              aria-label="Mobile navigation"
             >
-              <div className="flex items-center justify-between pb-6 border-b border-light-border dark:border-dark-border">
-                <span className="font-semibold text-gray-900 dark:text-white">Menu</span>
-                <ThemeToggle />
+              {/* Drawer header */}
+              <div className="flex h-20 items-center justify-between border-b border-light-border px-6 dark:border-dark-border">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('hero')}
+                  className="flex items-center gap-2"
+                >
+                  <img
+                    src={logo}
+                    alt="Vithusan logo"
+                    className="h-8 w-8 object-contain grayscale contrast-125 dark:invert"
+                  />
+
+                  <span className="font-display text-lg font-extrabold tracking-tight text-light-text dark:text-white">
+                    Vithusan<span className="text-light-muted dark:text-dark-muted">.</span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-light-text hover:bg-light-cardHover dark:text-white dark:hover:bg-dark-card"
+                  aria-label="Close navigation menu"
+                >
+                  <HiX size={23} />
+                </button>
               </div>
 
-              <div className="flex flex-col py-4">
-                {navLinks.map((link) => (
-                  <button
-                    key={link.name}
-                    onClick={() => scrollToSection(link.id)}
-                    className="text-left py-3.5 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-accent dark:hover:text-accent border-b border-gray-100 dark:border-gray-800/80 transition-colors"
-                  >
-                    {link.name}
-                  </button>
-                ))}
-              </div>
+              {/* Navigation links */}
+              <nav className="flex flex-1 flex-col px-5 py-6">
+                {navLinks.map((link, index) => {
+                  const isActive = activeSection === link.id;
 
-              <div className="mt-auto pb-8 pt-4">
+                  return (
+                    <motion.button
+                      key={link.id}
+                      type="button"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: index * 0.04,
+                      }}
+                      onClick={() => scrollToSection(link.id)}
+                      className={`group flex items-center justify-between border-b border-light-border py-4 text-left transition-colors dark:border-dark-border ${
+                        isActive
+                          ? 'text-light-text dark:text-white'
+                          : 'text-light-muted dark:text-dark-muted'
+                      }`}
+                    >
+                      <span className="text-base font-semibold">
+                        {link.name}
+                      </span>
+
+                      <span
+                        className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                          isActive
+                            ? 'scale-100 bg-light-text dark:bg-white'
+                            : 'scale-0 bg-light-muted group-hover:scale-100 dark:bg-dark-muted'
+                        }`}
+                      />
+                    </motion.button>
+                  );
+                })}
+              </nav>
+
+              {/* Drawer footer */}
+              <div className="border-t border-light-border px-6 py-6 dark:border-dark-border">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-light-muted dark:text-dark-muted">
+                  Statistics × Technology
+                </p>
+
+                <p className="mt-2 text-sm leading-relaxed text-light-muted dark:text-dark-muted">
+                  Full-Stack Developer building modern web experiences
+                  with code and data.
+                </p>
               </div>
-            </motion.div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 

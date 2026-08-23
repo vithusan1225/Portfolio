@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaCode, FaRocket, FaTerminal, FaChevronDown, FaChevronUp, FaServer, FaDatabase } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+import React, { useEffect, useState } from 'react';
+import {
+  FaArrowRight,
+  FaCode,
+  FaDatabase,
+  FaRocket,
+  FaServer,
+} from 'react-icons/fa';
+
 import { personalInfo } from '../data/portfolioData';
+import SocialLinks from './SocialLinks';
 
 const Hero = () => {
-  const [showSpecs, setShowSpecs] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showSpecs, setShowSpecs] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -14,203 +20,259 @@ const Hero = () => {
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
+
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   };
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center relative overflow-hidden pt-24 pb-16 bg-gradient-to-b from-slate-100 via-blue-50/40 to-light dark:from-black dark:via-black dark:to-dark transition-colors duration-300"
+      className="relative flex min-h-screen items-center overflow-hidden border-b border-light-border bg-white pb-16 pt-24 transition-colors duration-300 dark:border-dark-border dark:bg-black"
     >
-      {/* Subtle Background Glows */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/10 dark:bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-400/10 dark:bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Background decoration */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl dark:bg-purple-500/10" />
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          {/* Left: Intro & CTAs with Transitions.dev Texts reveal */}
-          <div className="lg:w-7/12 flex flex-col items-start text-left">
-            <div className={`t-stagger ${isLoaded ? 'is-shown' : ''}`}>
-              <div className="t-stagger-line t-stagger-line--1 inline-flex self-start w-fit items-center gap-1.5 px-2.5 py-1 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border shadow-sm mb-6">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-primary dark:text-accent">
-                  Available for Projects
-                </span>
-              </div>
+        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/10" />
+      </div>
 
-              <h1 className="t-stagger-line t-stagger-line--2 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight leading-tight">
-                Hi, I'm{' '}
-                <span className="text-primary dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-white dark:via-blue-200 dark:to-accent">
-                  {personalInfo?.name || 'Vithusan'}
+      <div className="container relative z-10 mx-auto px-6 md:px-12">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          {/* ================= LEFT CONTENT ================= */}
+          <div className="flex flex-col items-start text-left">
+            <div
+              className={`t-stagger ${
+                isLoaded ? 'is-shown' : ''
+              }`}
+            >
+              {/* Availability */}
+              <p className="t-stagger-line t-stagger-line--1 mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-light-muted dark:text-dark-muted sm:text-sm">
+                <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                Available for projects
+              </p>
+
+              {/* Main heading */}
+              <h1 className="t-stagger-line t-stagger-line--2 mb-3 max-w-5xl font-display text-[16vw] font-extrabold leading-[0.82] tracking-tight text-light-text dark:text-white sm:text-[12vw] lg:text-[8vw]">
+                Full-Stack
+                <br />
+
+                <span className="text-light-muted dark:text-dark-muted">
+                  Developer.
                 </span>
               </h1>
 
-              <h2 className="t-stagger-line t-stagger-line--3 text-2xl sm:text-3xl font-bold text-slate-700 dark:text-gray-300 mb-6 flex items-center gap-3">
-                <span className="text-accent">⚡</span> {personalInfo?.title || 'Full Stack Developer'}
-              </h2>
-
-              <p className="t-stagger-line t-stagger-line--4 text-slate-600 dark:text-gray-300 text-base sm:text-lg mb-8 max-w-xl leading-relaxed">
+              {/* Bio */}
+              <p className="t-stagger-line t-stagger-line--3 mb-8 mt-8 max-w-xl text-base leading-relaxed text-light-muted dark:text-dark-muted sm:text-lg">
                 {personalInfo?.bio ||
                   'Passionate full-stack developer specializing in creating high-performance web applications, robust backend architectures, and delightful user experiences.'}
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4 mb-10 w-full sm:w-auto">
+            {/* Buttons */}
+            <div className="mb-10 flex w-full flex-wrap gap-3 sm:w-auto">
               <button
+                type="button"
                 onClick={() => scrollToSection('projects')}
-                className="t-resize px-7 py-3.5 bg-accent hover:bg-accent-hover text-dark font-bold rounded-xl shadow-lg hover:shadow-accent/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
+                className="t-resize flex items-center justify-center gap-2 rounded-full bg-light-text px-7 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-light-text/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
               >
-                <FaRocket className="text-sm" /> View My Work
+                <FaRocket className="text-sm" />
+                View my work
+                <FaArrowRight className="text-xs" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowSpecs((prev) => !prev)}
+                className="flex items-center justify-center gap-2 rounded-full border border-light-border px-7 py-3.5 text-sm font-bold text-light-text transition-all hover:-translate-y-0.5 hover:border-light-text dark:border-dark-border dark:text-white dark:hover:border-white"
+              >
+                <FaCode className="text-sm" />
+
+                {showSpecs ? 'Hide stack' : 'View stack'}
               </button>
             </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 text-slate-600 dark:text-gray-400">
-              <span className="text-xs uppercase tracking-wider font-semibold mr-2 text-slate-400 dark:text-gray-500">
+            {/* Social links */}
+            <div className="flex items-center gap-3">
+              <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-light-muted dark:text-dark-muted">
                 Follow me:
               </span>
-              <a
-                href={personalInfo?.socials?.github || 'https://github.com'}
-                target="_blank"
-                rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-primary dark:hover:text-accent hover:scale-110 hover:shadow-[0_0_16px_rgba(212,168,67,0.45)] shadow-sm transition-all"
-                aria-label="GitHub"
-              >
-                <FaGithub size={18} />
-              </a>
-              <a
-                href={personalInfo?.socials?.linkedin || 'https://linkedin.com'}
-                target="_blank"
-                rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-[#0a66c2] hover:scale-110 hover:shadow-[0_0_16px_rgba(10,102,194,0.45)] shadow-sm transition-all"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin size={18} />
-              </a>
-              <a
-                href={personalInfo?.socials?.twitter || 'https://x.com'}
-                target="_blank"
-                rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-black dark:hover:text-white hover:scale-110 hover:shadow-[0_0_16px_rgba(15,23,42,0.45)] dark:hover:shadow-[0_0_16px_rgba(255,255,255,0.45)] shadow-sm transition-all"
-                aria-label="X"
-              >
-                <FaXTwitter size={18} />
-              </a>
-              <a
-                href={personalInfo?.socials?.instagram || 'https://instagram.com'}
-                target="_blank"
-                rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-[#e4405f] hover:scale-110 hover:shadow-[0_0_16px_rgba(228,64,95,0.45)] shadow-sm transition-all"
-                aria-label="Instagram"
-              >
-                <FaInstagram size={18} />
-              </a>
-              <a
-                href={personalInfo?.socials?.facebook || 'https://facebook.com'}
-                target="_blank"
-                rel="noreferrer"
-                className="t-resize w-10 h-10 rounded-full bg-white dark:bg-dark-card border border-light-border dark:border-dark-border flex items-center justify-center hover:text-[#1877f2] hover:scale-110 hover:shadow-[0_0_16px_rgba(24,119,242,0.45)] shadow-sm transition-all"
-                aria-label="Facebook"
-              >
-                <FaFacebook size={18} />
-              </a>
+
+              <SocialLinks socials={personalInfo?.socials} />
             </div>
           </div>
 
-          {/* Right: Modern Tech Card & Visual with t-panel-slide */}
-          <motion.div
-            className="lg:w-5/12 w-full flex justify-center"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="relative w-full max-w-md">
-              {/* Card Container */}
-              <div className="t-resize bg-white dark:bg-dark-card border border-slate-200/80 dark:border-dark-border rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden backdrop-blur-sm">
-                {/* Header bar */}
-                <div className="bg-slate-100 dark:bg-[#050505] px-4 py-3 border-b border-slate-200 dark:border-dark-border flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-amber-400" />
-                    <div className="w-3 h-3 rounded-full bg-emerald-400" />
-                  </div>
-                  <button
-                    onClick={() => setShowSpecs(!showSpecs)}
-                    className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-gray-300 hover:text-accent font-mono font-semibold transition-colors"
-                  >
-                    <FaTerminal size={11} /> developer.js {showSpecs ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
-                  </button>
+          {/* ================= RIGHT CODE CARD ================= */}
+          <div className="relative mx-auto w-full max-w-xl lg:mx-0">
+            {/* Code window */}
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl dark:border-dark-border dark:bg-[#0b0b0b]">
+              {/* Window header */}
+              <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-dark-border">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-red-400" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-400" />
+                  <span className="h-3 w-3 rounded-full bg-green-400" />
                 </div>
 
-                {/* Code body */}
-                <div className="p-6 font-mono text-xs sm:text-sm space-y-2 text-slate-700 dark:text-gray-300">
-                  <p className="text-slate-400 dark:text-gray-500">// Modern Full Stack Developer</p>
-                  <p>
-                    <span className="text-purple-600 dark:text-purple-400">const</span>{' '}
-                    <span className="text-blue-600 dark:text-blue-400">developer</span> = &#123;
-                  </p>
-                  <p className="pl-4">
-                    <span className="text-slate-600 dark:text-gray-400">name:</span>{' '}
-                    <span className="text-emerald-600 dark:text-emerald-400">
-                      '{personalInfo?.name || 'Vithusan'}'
-                    </span>
-                    ,
-                  </p>
-                  <p className="pl-4">
-                    <span className="text-slate-600 dark:text-gray-400">role:</span>{' '}
-                    <span className="text-emerald-600 dark:text-emerald-400">
-                      '{personalInfo?.title || 'Full Stack Engineer'}'
-                    </span>
-                    ,
-                  </p>
-                  <p className="pl-4">
-                    <span className="text-slate-600 dark:text-gray-400">coreTech:</span> [
-                    <span className="text-amber-600 dark:text-amber-400">'React'</span>,{' '}
-                    <span className="text-amber-600 dark:text-amber-400">'Node.js'</span>,{' '}
-                    <span className="text-amber-600 dark:text-amber-400">'MongoDB'</span>],
-                  </p>
-                  <p className="pl-4">
-                    <span className="text-slate-600 dark:text-gray-400">passion:</span>{' '}
-                    <span className="text-emerald-600 dark:text-emerald-400">
-                      'Building impact-driven solutions'
-                    </span>
-                  </p>
-                  <p>&#125;;</p>
+                <span className="font-mono text-xs text-slate-400">
+                  developer.js
+                </span>
 
-                  {/* Transitions.dev t-panel-slide Drawer for Environment Specs */}
-                  <div className={`overflow-hidden transition-all duration-300 ${showSpecs ? 'max-h-32 pt-2' : 'max-h-0'}`}>
-                    <div
-                      className="t-panel-slide bg-slate-50 dark:bg-dark p-3 rounded-xl border border-slate-200 dark:border-dark-border space-y-1 text-xs"
-                      data-open={showSpecs ? 'true' : 'false'}
-                    >
-                      <div className="flex items-center justify-between text-slate-500 dark:text-gray-400">
-                        <span className="flex items-center gap-1"><FaServer size={10} className="text-primary dark:text-accent" /> Runtime:</span>
-                        <span className="text-slate-800 dark:text-gray-200 font-semibold">Node.js 18+ / Express</span>
-                      </div>
-                      <div className="flex items-center justify-between text-slate-500 dark:text-gray-400">
-                        <span className="flex items-center gap-1"><FaDatabase size={10} className="text-emerald-500" /> Database:</span>
-                        <span className="text-slate-800 dark:text-gray-200 font-semibold">MongoDB / Mongoose</span>
-                      </div>
+                <div className="w-12" />
+              </div>
+
+              {/* Code body */}
+              <div className="space-y-2 p-6 font-mono text-xs text-slate-700 dark:text-gray-300 sm:text-sm">
+                {/* Comment */}
+                <p className="text-slate-400 dark:text-gray-500">
+                  // Modern Full Stack Developer
+                </p>
+
+                {/* const developer */}
+                <p>
+                  <span className="text-purple-600 dark:text-purple-400">
+                    const
+                  </span>{' '}
+                  <span className="text-blue-600 dark:text-blue-400">
+                    developer
+                  </span>{' '}
+                  = {'{'}
+                </p>
+
+                {/* name */}
+                <p className="pl-4">
+                  <span className="text-slate-600 dark:text-gray-400">
+                    name:
+                  </span>{' '}
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    '{personalInfo?.name || 'Vithusan'}'
+                  </span>
+                  ,
+                </p>
+
+                {/* role */}
+                <p className="pl-4">
+                  <span className="text-slate-600 dark:text-gray-400">
+                    role:
+                  </span>{' '}
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    '{personalInfo?.title || 'Full Stack Developer'}'
+                  </span>
+                  ,
+                </p>
+
+                {/* Core technologies */}
+                <p className="pl-4">
+                  <span className="text-slate-600 dark:text-gray-400">
+                    coreTech:
+                  </span>{' '}
+                  [
+                  <span className="text-amber-600 dark:text-amber-400">
+                    'React'
+                  </span>
+                  ,{' '}
+                  <span className="text-amber-600 dark:text-amber-400">
+                    'Node.js'
+                  </span>
+                  ,{' '}
+                  <span className="text-amber-600 dark:text-amber-400">
+                    'MongoDB'
+                  </span>
+                  ],
+                </p>
+
+                {/* Passion */}
+                <p className="pl-4">
+                  <span className="text-slate-600 dark:text-gray-400">
+                    passion:
+                  </span>{' '}
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    'Building impact-driven solutions'
+                  </span>
+                </p>
+
+                <p>{'};'}</p>
+
+                {/* Environment specs */}
+                <div
+                  className={`overflow-hidden transition-all duration-500 ${
+                    showSpecs
+                      ? 'max-h-40 pt-3 opacity-100'
+                      : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="space-y-2 rounded-xl border border-slate-200 bg-white p-4 text-xs dark:border-dark-border dark:bg-[#111]">
+                    {/* Runtime */}
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="flex items-center gap-2 text-slate-500 dark:text-gray-400">
+                        <FaServer className="text-purple-500" />
+                        Runtime
+                      </span>
+
+                      <span className="font-semibold text-slate-800 dark:text-gray-200">
+                        Node.js / Express
+                      </span>
+                    </div>
+
+                    {/* Database */}
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="flex items-center gap-2 text-slate-500 dark:text-gray-400">
+                        <FaDatabase className="text-emerald-500" />
+                        Database
+                      </span>
+
+                      <span className="font-semibold text-slate-800 dark:text-gray-200">
+                        MongoDB / Mongoose
+                      </span>
+                    </div>
+
+                    {/* Frontend */}
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="flex items-center gap-2 text-slate-500 dark:text-gray-400">
+                        <FaCode className="text-blue-500" />
+                        Frontend
+                      </span>
+
+                      <span className="font-semibold text-slate-800 dark:text-gray-200">
+                        React / Tailwind
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                  <div className="pt-3 border-t border-slate-100 dark:border-dark-border flex items-center justify-between text-xs text-slate-500 dark:text-gray-400">
-                    <span className="flex items-center gap-1">
-                      <FaCode className="text-accent" /> Clean Architecture
-                    </span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">● Ready to deploy</span>
-                  </div>
+                {/* Footer */}
+                <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4 text-xs text-slate-500 dark:border-dark-border dark:text-gray-400">
+                  <span className="flex items-center gap-2">
+                    <FaCode className="text-accent" />
+                    Clean Architecture
+                  </span>
+
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                    ● Ready to deploy
+                  </span>
                 </div>
               </div>
-
-              {/* Floating tech pill bottom-left */}
-              <div className="absolute -bottom-4 -left-4 bg-white dark:bg-[#0b0b0b] border border-light-border dark:border-dark-border px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 text-xs font-semibold text-primary dark:text-accent">
-                <span>🚀 5+ Years Exp</span>
-              </div>
             </div>
-          </motion.div>
+
+            {/* Floating experience badge */}
+            <div className="absolute -bottom-5 -left-5 rounded-xl border border-light-border bg-white px-4 py-2 shadow-lg dark:border-dark-border dark:bg-[#0b0b0b]">
+  <span className="text-xs font-semibold text-slate-700 dark:text-white">
+    🚀 Building & Learning
+  </span>
+</div>
+
+            {/* Floating status badge */}
+            <div className="absolute -right-4 -top-4 hidden rounded-full border border-light-border bg-white px-4 py-2 shadow-lg dark:border-dark-border dark:bg-[#0b0b0b] sm:block">
+              <span className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-gray-300">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                Open to opportunities
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
