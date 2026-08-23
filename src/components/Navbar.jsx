@@ -3,6 +3,7 @@ import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
+import logo from '../data/LOGO.png';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,6 +51,7 @@ const Navbar = () => {
           className="flex items-center cursor-pointer"
           onClick={() => scrollToSection('hero')}
         >
+          <img src={logo} alt="Portfolio logo" className="h-9 w-9 object-contain mr-2" />
           <span className="font-bold text-xl tracking-tight text-primary dark:text-white">
             Portfolio<span className="text-accent">.</span>
           </span>
