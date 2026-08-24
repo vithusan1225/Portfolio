@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,8 +15,13 @@ import Footer from './components/Footer';
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-light dark:bg-dark text-light-text dark:text-dark-text transition-colors duration-300">
+      <div className="min-h-screen overflow-x-hidden bg-transparent text-light-text transition-colors duration-300 dark:bg-transparent dark:text-dark-text">
+        
+        {/* Navigation */}
         <Navbar />
+
+        {/* Main Content */}
+        <main>
           <Hero />
           <About />
           <Skills />
@@ -24,7 +30,11 @@ function App() {
           <Testimonials />
           <Blog />
           <Contact />
+        </main>
+
+        {/* Footer */}
         <Footer />
+
       </div>
     </ThemeProvider>
   );

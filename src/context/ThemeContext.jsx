@@ -4,12 +4,18 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Check saved local storage theme
-    const savedTheme = localStorage.getItem('portfolio_theme');
-    if (savedTheme) {
-      return savedTheme;
+    if (typeof window === 'undefined') {
+      return 'light';
     }
-    // Check system preference
+
+    try {
+      const savedTheme = window.localStorage.getItem('portfolio_theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        return savedTheme;
+      }
+    } catch {
+    }
+
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }
@@ -23,7 +29,11 @@ export const ThemeProvider = ({ children }) => {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('portfolio_theme', theme);
+
+    try {
+      window.localStorage.setItem('portfolio_theme', theme);
+    } catch {
+    }
   }, [theme]);
 
   const toggleTheme = () => {

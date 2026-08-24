@@ -7,29 +7,47 @@ const ThemeToggle = ({ className = '' }) => {
   const [isInit, setIsInit] = useState(false);
 
   const handleClick = () => {
-    if (!isInit) setIsInit(true);
+    setIsInit(true);
     toggleTheme();
   };
 
+  const mode = isDark ? 'light' : 'dark';
+
   return (
     <button
+      type="button"
       role="switch"
       aria-checked={isDark}
-      data-on={isDark ? 'true' : 'false'}
+      aria-label={`Switch to ${mode} mode`}
+      title={`Switch to ${mode} mode`}
+      data-on={isDark}
       onClick={handleClick}
-      className={`t-toggle border ${
-        isDark
-          ? 'bg-dark-card border-dark-border'
-          : 'bg-slate-200 border-slate-300'
-      } ${isInit ? 'is-init' : ''} ${className}`}
-      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      className={`
+        t-toggle
+        border
+        ${
+          isDark
+            ? 'bg-dark-cardHover border-dark-text/50'
+            : 'bg-light-cardHover border-light-border'
+        }
+        ${isInit ? 'is-init' : ''}
+        focus-visible:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-white/70
+        ${className}
+      `}
     >
       <span className="t-toggle-thumb">
         {isDark ? (
-          <HiSun className="w-3.5 h-3.5 text-accent" />
+          <HiSun
+            className="w-3.5 h-3.5 text-black"
+            aria-hidden="true"
+          />
         ) : (
-          <HiMoon className="w-3.5 h-3.5 text-primary" />
+          <HiMoon
+            className="w-3.5 h-3.5 text-black"
+            aria-hidden="true"
+          />
         )}
       </span>
     </button>
