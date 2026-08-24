@@ -78,7 +78,7 @@ const Hero = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection('projects')}
-                className="t-resize flex items-center justify-center gap-2 rounded-full bg-light-text px-7 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-light-text/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
+                className="t-resize flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-accent/90"
               >
                 <FaRocket className="text-sm" />
                 View my work
@@ -88,7 +88,7 @@ const Hero = () => {
               <button
                 type="button"
                 onClick={() => setShowSpecs((prev) => !prev)}
-                className="flex items-center justify-center gap-2 rounded-full border border-light-border px-7 py-3.5 text-sm font-bold text-light-text transition-all hover:-translate-y-0.5 hover:border-light-text dark:border-dark-border dark:text-white dark:hover:border-white"
+                className="flex items-center justify-center gap-2 rounded-full border border-accent px-7 py-3.5 text-sm font-bold text-accent transition-all hover:-translate-y-0.5 hover:border-accent/80 hover:bg-accent/5 dark:border-accent dark:text-accent"
               >
                 <FaCode className="text-sm" />
 

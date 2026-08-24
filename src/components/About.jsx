@@ -222,7 +222,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   download
-                  className="t-resize inline-flex items-center gap-2 rounded-full bg-light-text px-7 py-3.5 font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-light-text/90 hover:shadow-xl dark:bg-white dark:text-black dark:hover:bg-white/90"
+                  className="t-resize inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-xl"
                 >
                   <FaDownload className="text-sm" />
                   Download Resume

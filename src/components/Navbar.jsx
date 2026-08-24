@@ -167,8 +167,8 @@ const Navbar = () => {
                   onClick={() => scrollToSection(link.id)}
                   className={`relative rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200 ${
                     isActive
-                      ? 'text-light-text dark:text-white'
-                      : 'text-light-muted hover:text-light-text dark:text-dark-muted dark:hover:text-white'
+                      ? 'text-accent'
+                      : 'text-light-muted hover:text-accent dark:text-dark-muted dark:hover:text-accent'
                   }`}
                 >
                   {link.name}
@@ -177,7 +177,7 @@ const Navbar = () => {
                   {isActive && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-light-text dark:bg-white"
+                      className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent"
                       transition={{
                         type: 'spring',
                         stiffness: 400,

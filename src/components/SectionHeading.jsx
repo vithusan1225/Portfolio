@@ -35,13 +35,13 @@ const SectionHeading = ({
             isCentered ? 'justify-center' : 'justify-start'
           }`}
         >
-          <span className="h-px w-6 bg-light-text dark:bg-white" />
+          <span className="h-px w-6 bg-accent" />
 
           <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-light-muted dark:text-dark-muted">
             {eyebrow}
           </span>
 
-          <span className="h-px w-6 bg-light-text dark:bg-white" />
+          <span className="h-px w-6 bg-accent" />
         </div>
       )}
 
@@ -71,7 +71,7 @@ const SectionHeading = ({
           delay: 0.2,
           ease: 'easeOut',
         }}
-        className="mt-5 h-1 rounded-full bg-light-text dark:bg-white"
+        className="mt-5 h-1 rounded-full bg-accent"
       />
     </motion.div>
   );

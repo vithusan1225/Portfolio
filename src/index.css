@@ -118,8 +118,38 @@ body {
   @apply bg-light text-light-text font-sans antialiased;
   @apply transition-colors duration-300;
 
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: -1rem;
+  pointer-events: none;
+}
+
+body::before {
+  z-index: -2;
+  background:
+    linear-gradient(rgb(0 0 0 / 42%), rgb(0 0 0 / 42%)),
+    url('/background.jpg') center / cover no-repeat,
+    #161616;
+  filter: blur(4px);
+  transform: scale(1.03);
+}
+
+body::after {
+  z-index: -1;
+  background: rgb(0 0 0 / 18%);
+}
+
+#root {
+  position: relative;
+  z-index: 1;
 }
 
 html.dark body {

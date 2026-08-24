@@ -200,31 +200,34 @@ const Contact = () => {
             <SocialLinks socials={personalInfo?.socials} />
           </div>
         </motion.div>
+{/* =====================================================
+    BOTTOM CTA
+====================================================== */}
 
-        {/* =====================================================
-            BOTTOM CTA
-        ====================================================== */}
-
-        {email && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: 0.4,
-            }}
-            className="mt-12 text-center"
-          >
-            <a
-              href={`mailto:${email}`}
-              className="t-resize inline-flex items-center gap-2 rounded-full bg-light-text px-7 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-xl dark:bg-white dark:text-black"
-            >
-              Start a conversation
-              <FaArrowRight className="text-xs" />
-            </a>
-          </motion.div>
-        )}
+{email && (
+  <motion.div
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{
+      duration: 0.5,
+      delay: 0.4,
+    }}
+    className="mt-12 text-center"
+  >
+    <a
+      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+        email
+      )}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="t-resize inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-xl"
+    >
+      Start a conversation
+      <FaArrowRight className="text-xs" />
+    </a>
+  </motion.div>
+)}
       </div>
     </section>
   );

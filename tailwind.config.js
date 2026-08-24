@@ -15,9 +15,9 @@ export default {
           light: '#404040',
         },
         accent: {
-          DEFAULT: '#0a0a0a',
-          hover: '#262626',
-          light: '#404040',
+          DEFAULT: '#2563eb',
+          hover: '#1d4ed8',
+          light: '#60a5fa',
         },
         dark: {
           DEFAULT: '#000000',
@@ -37,8 +37,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Archivo', 'Inter', 'sans-serif'],
+        sans: ['Manrope', 'sans-serif'],
+        display: ['Space Grotesk', 'Manrope', 'sans-serif'],
       },
     },
   },

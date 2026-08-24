@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaQuoteLeft,
@@ -16,6 +16,26 @@ const Testimonials = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const resumeTimeoutRef = useRef(null);
+
+  const pauseAutoplay = useCallback(() => {
+    setIsPaused(true);
+
+    if (resumeTimeoutRef.current) {
+      window.clearTimeout(resumeTimeoutRef.current);
+    }
+
+    resumeTimeoutRef.current = window.setTimeout(() => {
+      setIsPaused(false);
+      resumeTimeoutRef.current = null;
+    }, 8000);
+  }, []);
+
+  useEffect(() => () => {
+    if (resumeTimeoutRef.current) {
+      window.clearTimeout(resumeTimeoutRef.current);
+    }
+  }, []);
 
   /*
    * ------------------------------------------------------------
@@ -59,12 +79,7 @@ const Testimonials = () => {
 
   const goToSlide = (index) => {
     setCurrentIndex(index);
-    setIsPaused(true);
-
-    // Resume autoplay after a short interaction period.
-    window.setTimeout(() => {
-      setIsPaused(false);
-    }, 8000);
+    pauseAutoplay();
   };
 
   /*
@@ -249,12 +264,7 @@ const Testimonials = () => {
                   type="button"
                   onClick={() => {
                     handlePrev();
-                    setIsPaused(true);
-
-                    window.setTimeout(
-                      () => setIsPaused(false),
-                      8000
-                    );
+                    pauseAutoplay();
                   }}
                   aria-label="Previous testimonial"
                   className="group absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-light-border bg-white text-light-text shadow-sm transition-all duration-300 hover:scale-110 hover:border-light-text dark:border-dark-border dark:bg-dark dark:text-white dark:hover:border-white sm:left-5 sm:h-10 sm:w-10"
@@ -273,12 +283,7 @@ const Testimonials = () => {
                   type="button"
                   onClick={() => {
                     handleNext();
-                    setIsPaused(true);
-
-                    window.setTimeout(
-                      () => setIsPaused(false),
-                      8000
-                    );
+                    pauseAutoplay();
                   }}
                   aria-label="Next testimonial"
                   className="group absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-light-border bg-white text-light-text shadow-sm transition-all duration-300 hover:scale-110 hover:border-light-text dark:border-dark-border dark:bg-dark dark:text-white dark:hover:border-white sm:right-5 sm:h-10 sm:w-10"

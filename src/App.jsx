@@ -15,7 +15,7 @@ import Footer from './components/Footer';
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen overflow-x-hidden bg-light text-light-text transition-colors duration-300 dark:bg-dark dark:text-dark-text">
+      <div className="min-h-screen overflow-x-hidden bg-transparent text-light-text transition-colors duration-300 dark:bg-transparent dark:text-dark-text">
         
         {/* Navigation */}
         <Navbar />

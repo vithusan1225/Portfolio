@@ -1,71 +1,103 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaBriefcase, FaCalendarAlt } from 'react-icons/fa';
+
 import { experiences } from '../data/portfolioData';
 import SectionHeading from './SectionHeading';
 
 const Experience = () => {
+  const experienceList = Array.isArray(experiences)
+    ? experiences
+    : [];
+
+  if (experienceList.length === 0) {
+    return null;
+  }
+
   return (
-    <section id="experience" className="py-24 md:py-32 bg-light-cardHover dark:bg-dark-card/40 border-t border-light-border dark:border-dark-border transition-colors duration-300">
+    <section
+      id="experience"
+      className="border-t border-light-border bg-light-cardHover py-24 transition-colors duration-300 dark:border-dark-border dark:bg-dark-card/40 md:py-32"
+    >
       <div className="container mx-auto px-6 md:px-10">
-        <SectionHeading eyebrow="Career Journey" title="Work Experience" align="center" />
+        <SectionHeading
+          eyebrow="Career Journey"
+          title="Experience"
+          description="A snapshot of the roles, projects, and responsibilities that shaped my development career."
+          className="mb-16"
+          align="center"
+        />
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Center Line */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-light-border dark:bg-dark-border"></div>
+        <div className="relative mx-auto max-w-5xl">
+          <div className="absolute bottom-0 left-6 top-0 hidden w-px bg-gradient-to-b from-accent via-light-border to-transparent md:left-1/2 md:block" />
 
-          {experiences.map((exp, index) => {
-            const isLeft = index % 2 === 0;
-            return (
-              <div
-                key={exp.id || index}
-                className={`mb-12 flex justify-between items-center w-full ${
-                  isLeft ? 'md:flex-row-reverse' : 'md:flex-row'
-                } flex-col`}
-              >
-                <div className="hidden md:block w-5/12"></div>
+          <div className="space-y-8 md:space-y-10">
+            {experienceList.map((item, index) => {
+              const isEven = index % 2 === 0;
 
-                {/* Center Timeline Icon/Dot */}
-                <div className="z-20 w-8 h-8 bg-white dark:bg-dark-card border-2 border-light-text dark:border-white rounded-full mb-4 md:mb-0 flex items-center justify-center">
-                  <FaBriefcase className="text-xs text-light-text dark:text-white" />
-                </div>
-
-                {/* Experience Card */}
+              return (
                 <motion.div
-                  initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6 }}
-                  className="t-resize w-full md:w-5/12 bg-white dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-2xl hover:border-light-text dark:hover:border-white transition-all"
+                  key={item?.id || `${item?.company}-${item?.role}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="relative"
                 >
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-light-muted dark:text-dark-muted mb-1">
-                    <FaCalendarAlt /> {exp.duration}
-                  </div>
-                  <h3 className="text-xl font-bold text-light-text dark:text-white mb-0.5">
-                    {exp.role}
-                  </h3>
-                  <h4 className="text-sm font-semibold text-light-text/70 dark:text-dark-text/70 mb-3">
-                    {exp.company}
-                  </h4>
-                  <p className="text-light-muted dark:text-dark-muted text-sm mb-4 leading-relaxed">
-                    {exp.description}
-                  </p>
+                  <div className="absolute left-0 top-7 hidden h-4 w-4 -translate-x-1/2 rounded-full border-4 border-light-cardHover bg-accent md:left-1/2 md:block dark:border-dark-card" />
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {exp.technologies &&
-                      exp.technologies.map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2.5 py-1 bg-light-cardHover dark:bg-dark text-light-text dark:text-dark-text border border-light-border dark:border-dark-border text-xs rounded-md font-medium"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                  <div
+                    className={`md:grid md:grid-cols-2 ${
+                      isEven ? 'md:pr-12' : 'md:pl-12'
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        isEven ? 'md:col-start-1 md:text-right' : 'md:col-start-2'
+                      }`}
+                    >
+                      <article className="relative overflow-hidden rounded-2xl border border-light-border bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-light-text hover:shadow-xl dark:border-dark-border dark:bg-dark-card dark:hover:border-white">
+                        <div className="mb-4 flex flex-wrap items-center gap-2 md:justify-end">
+                          <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+                            <FaBriefcase className="text-[11px]" />
+                            {item?.role || 'Role'}
+                          </span>
+
+                          <span className="inline-flex items-center gap-2 rounded-full border border-light-border bg-light-cardHover px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-light-muted dark:border-dark-border dark:bg-dark dark:text-dark-muted">
+                            <FaCalendarAlt className="text-[10px]" />
+                            {item?.duration || 'Duration'}
+                          </span>
+                        </div>
+
+                        <h3 className="mb-2 text-xl font-bold tracking-tight text-light-text dark:text-white">
+                          {item?.company || 'Company'}
+                        </h3>
+
+                        <p className="mb-4 text-sm leading-relaxed text-light-muted dark:text-dark-muted">
+                          {item?.description ||
+                            'Description for this role is unavailable.'}
+                        </p>
+
+                        {Array.isArray(item?.technologies) &&
+                          item.technologies.length > 0 && (
+                            <div className="flex flex-wrap gap-2 md:justify-end">
+                              {item.technologies.map((technology) => (
+                                <span
+                                  key={`${item?.id || item?.company}-${technology}`}
+                                  className="rounded-full border border-light-border bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-light-text dark:border-dark-border dark:bg-white/5 dark:text-dark-text"
+                                >
+                                  {technology}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                      </article>
+                    </div>
                   </div>
                 </motion.div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
