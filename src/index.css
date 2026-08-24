@@ -470,7 +470,57 @@ transition-delay: 0s;
 }
 
 /* ============================================================
-6. SLIDING TABS
+6. ENHANCED MOTION UTILITIES
+============================================================ */
+
+.t-float-slow {
+animation: t-float-slow 12s ease-in-out infinite alternate;
+}
+
+.t-float-medium {
+animation: t-float-medium 9s ease-in-out infinite alternate;
+}
+
+.t-glow-pulse {
+animation: t-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes t-float-slow {
+0% {
+transform: translate3d(0, 0, 0) scale(1);
+}
+50% {
+transform: translate3d(0, -10px, 0) scale(1.02);
+}
+100% {
+transform: translate3d(0, 8px, 0) scale(0.99);
+}
+}
+
+@keyframes t-float-medium {
+0% {
+transform: translate3d(0, 0, 0) rotate(0deg);
+}
+50% {
+transform: translate3d(12px, -16px, 0) rotate(1deg);
+}
+100% {
+transform: translate3d(-10px, 12px, 0) rotate(-1deg);
+}
+}
+
+@keyframes t-glow-pulse {
+0%,
+100% {
+box-shadow: 0 0 0 rgba(37, 99, 235, 0);
+}
+50% {
+box-shadow: 0 0 24px rgba(37, 99, 235, 0.16);
+}
+}
+
+/* ============================================================
+7. SLIDING TABS
 ============================================================ */
 
 .t-tabs {
@@ -551,7 +601,7 @@ pointer-events: none;
 }
 
 /* ============================================================
-7. THEME TOGGLE
+8. THEME TOGGLE
 ============================================================ */
 
 .t-toggle {
@@ -668,7 +718,7 @@ transform: translateX(0);
 }
 
 /* ============================================================
-8. HERO TYPOGRAPHY
+9. HERO TYPOGRAPHY
 ============================================================ */
 
 .hero-outline-text {
@@ -698,7 +748,7 @@ color: #ffffff;
 }
 
 /* ============================================================
-9. DISPLAY FONT
+10. DISPLAY FONT
 ============================================================ */
 
 .font-display {
@@ -707,7 +757,7 @@ text-wrap: balance;
 }
 
 /* ============================================================
-10. THEME-AWARE TEXT UTILITIES
+11. THEME-AWARE TEXT UTILITIES
 ============================================================ */
 
 .text-theme {
@@ -727,7 +777,7 @@ color: #a3a3a3;
 }
 
 /* ============================================================
-11. CUSTOM SCROLLBAR
+12. CUSTOM SCROLLBAR
 ============================================================ */
 
 ::-webkit-scrollbar {
@@ -750,7 +800,7 @@ background: var(--scrollbar-thumb-hover);
 }
 
 /* ============================================================
-12. REDUCED MOTION
+13. REDUCED MOTION
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
@@ -783,7 +833,7 @@ animation: none !important;
 }
 
 /* ============================================================
-13. IMAGE / SVG SAFETY
+14. IMAGE / SVG SAFETY
 ============================================================ */
 
 img,
@@ -796,7 +846,7 @@ display: block;
 }
 
 /* ============================================================
-14. MOBILE HERO
+15. MOBILE HERO
 ============================================================ */
 
 @media (max-width: 767px) {
@@ -806,7 +856,7 @@ display: block;
 }
 
 /* ============================================================
-15. SMOOTH THEME TRANSITION
+16. SMOOTH THEME TRANSITION
 ============================================================ */
 
 html,
